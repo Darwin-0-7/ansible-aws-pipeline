@@ -1,24 +1,25 @@
-name : Ansible Deploy to AWS
+name: Ansible Deploy to AWS
 
 on:
   push:
     branches:
       - main
-  jobs:
-    deploy:
-      runs-on: ubuntu-latest
 
-      steps:
-        - name: Checkout Code
-          uses: actions/checkout@v3
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-        - name: Set up SSH Key
-          run: |
-            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/workernode-key.pem
-            chmod 400 ~/worker-node-key.pem
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-        - name: Install Ansible
-          run: sudo apt-get update && sudo apt-get install -y ansible
+      - name: Set up SSH Key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/worker-node-key.pem
+          chmod 400 ~/worker-node-key.pem
 
-        - name: Run Ansible Playbook
-          run: ansile-playbook -i hosts apache.yml
+      - name: Install Ansible
+        run: sudo apt-get update && sudo apt-get install -y ansible
+
+      - name: Run Ansible Playbook
+        run: ansible-playbook -i hosts apache.yml
